@@ -21,7 +21,8 @@ module.exports = function(grunt) {
     jshint: {
       all: [
         'Gruntfile.js',
-        '**.js',
+        '*.js',
+        'tasks/*.js',
         '<%= nodeunit.tests %>'
       ],
       options: {
@@ -30,7 +31,7 @@ module.exports = function(grunt) {
       }
     },
     clean: {
-      tests: ['tmp', 'src']
+      tests: ['tmp']
     },
     nodeunit: {
       tests: ['test/*_test.js']
@@ -40,6 +41,11 @@ module.exports = function(grunt) {
         files: bumpFiles,
         commitFiles: bumpFiles,
         push: false
+      }
+    },
+    esri_slurp_modules: {
+      options: {
+        version: version
       }
     }
   });
@@ -54,4 +60,10 @@ module.exports = function(grunt) {
   grunt.loadTasks('tasks');
 
   grunt.registerTask('test', ['clean', 'jshint', 'nodeunit']);
+
+  grunt.registerTask('default', ['jshint']);
+
+  grunt.registerTask('generate_list', ['esri_slurp_modules']);
+
+  grunt.registerTask('travis', ['jshint', 'nodeunit']);
 };

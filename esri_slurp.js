@@ -1,64 +1,50 @@
 /*
- * grunt-esri-slurp
- * https://github.com/steveoh/grunt-esri-slurp
- *
- * Copyright (c) 2014 steveoh
- * Licensed under the MIT license.
- */
+* esrislurp
+* https://github.com/steveoh/esrislurp
+*
+* Copyright (c) 2014 steveoh
+* Licensed under the MIT license.
+*/
 
 'use strict';
 var fs = require('fs'),
   path = require('path'),
-
   async = require('async'),
-  beautify = require('js-beautify').js_beautify,
+  beautify_js = require('js-beautify').js_beautify,
   beautify_css = require('js-beautify').css,
   mkdirp = require('mkdirp'),
   os = require('os'),
   request = require('request'),
   S = require('string'),
-  ProgressBar = require('progress'),
-
   unwind = require('./unwinder');
 
-module.exports = function(grunt) {
-  grunt.registerMultiTask('esri_slurp', 'download esri js api amd modules and create a package', function() {
-    var options = this.options({
-        version: null,
-        beautify: false
-      }),
-      done = this.async();
+function noop(){}
 
-    if (!options.version || !this.files[0].dest) {
-      grunt.fail.warn('version option is required and the dest file property must be set on the target.');
-    }
+module.exports = function(basePath, version, beautify, onSuccess, onError, onProgress) {
+    onSuccess = onSuccess || noop;
+    onError = onError || noop;
+    onProgress = onProgress || noop;
 
-    var packageLocation = this.files[0].dest;
-
-    packageLocation = S(packageLocation).ensureRight(path.sep).s;
-
-    grunt.log.subhead('downloading and processing esri version ' + options.version);
-
+    var packageLocation = S(basePath).ensureRight(path.sep).s;
     mkdirp.sync(packageLocation);
 
-    var esriVersionBaseUrl = 'http://js.arcgis.com/' + options.version;
-    if(+options.version > 3.10){
+    var esriModules = require('./modules/esriModules-' + version);
+    console.log('downloading and processing esri version ' + version);
+
+    var esriVersionBaseUrl = 'http://js.arcgis.com/' + version;
+    if(+version > 3.10){
      esriVersionBaseUrl += 'amd/esri/';
     }
     else{
       esriVersionBaseUrl += 'amd/js/esri/';
     }
+    console.log('esri base url: ' + esriVersionBaseUrl);
 
-    grunt.verbose.writeln('esri base url: ' + esriVersionBaseUrl);
-
-    var esriModules = require('./esriModules-' + options.version);
-
-    var bar = new ProgressBar('[:bar] :percent remaining: :etas elapsed: :elapseds', {
-      total: esriModules.length,
-      stream: process.stdout,
-      width: 30
-    });
-
+    var total = esriModules.length,
+        count = 0;
+    function signalProgessUpdate() {
+      onProgress({count: count, total: total});
+    }
     async.eachLimit(esriModules, 20, function(file, callback) {
       var subPath = S(path.dirname(file)).ensureRight('/').s,
         fileFolder = path.join(packageLocation, subPath),
@@ -74,11 +60,10 @@ module.exports = function(grunt) {
           encoding: 'binary'
         },
         function(error, response, body) {
+          count += 1;
           if (body.length < 1) {
-            bar.total = bar.total - 1;
-
+            signalProgessUpdate();
             callback(error, body);
-
             return;
           }
 
@@ -88,15 +73,15 @@ module.exports = function(grunt) {
           if (extension === '.js' || extension === '.css') {
             body = unwind(body);
 
-            if (options.beautify) {
+            if (beautify) {
               try {
                 if (extension === '.js') {
-                  body = beautify(body);
+                  body = beautify_js(body);
                 } else if (extension = '.css') {
                   body = beautify_css(body);
                 }
               } catch (e) {
-                grunt.log.warn(os.EOL + 'error beautifying: ' + file + ' ' + e);
+                console.log(os.EOL + 'error beautifying: ' + file + ' ' + e);
                 // swallow it's not the end of the world if it's not beautiful
               }
             }
@@ -104,16 +89,14 @@ module.exports = function(grunt) {
 
           fs.writeFile(newFile, body, 'binary');
 
-          bar.tick();
-
+          signalProgessUpdate();
           callback(error, body);
         });
     }, function(err) {
       if (err) {
-        grunt.fail.warn(err);
+        onError(err);
+      } else {
+        onSuccess();
       }
-
-      done();
     });
-  });
 };
