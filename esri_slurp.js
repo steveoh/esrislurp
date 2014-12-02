@@ -29,7 +29,6 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
     mkdirp.sync(packageLocation);
 
     var esriModules = require('./modules/esriModules-' + version);
-    console.log('downloading and processing esri version ' + version);
 
     var esriVersionBaseUrl = 'http://js.arcgis.com/' + version;
     if(+version > 3.10){
@@ -38,7 +37,6 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
     else{
       esriVersionBaseUrl += 'amd/js/esri/';
     }
-    console.log('esri base url: ' + esriVersionBaseUrl);
 
     var total = esriModules.length,
         count = 0;
