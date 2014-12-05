@@ -1,6 +1,7 @@
 Gruntfile.js
 *.sublime-project
+*.sublime-workspace
 esriModuleBuilder.js
 .*
 test
-tasks
+modules

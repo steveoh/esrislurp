@@ -1,6 +1,6 @@
 {
   "name": "esrislurp",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "download esri js api amd modules and create a package",
   "homepage": "https://github.com/steveoh/esrislurp",
   "repository": {
@@ -15,7 +15,7 @@
     "esri",
     "agrc"
   ],
-  "main": "esri_slurp.js",
+  "main": "esrislurp.js",
   "engines": {
     "node": ">= 0.8.0"
   },
@@ -26,9 +26,11 @@
     "grunt-contrib-clean": "^0",
     "grunt-contrib-jshint": "^0",
     "grunt-contrib-nodeunit": "^0",
-    "grunt-node-inspector": "^0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-debug-task": "^0.1.5",
     "jshint-stylish": "^1",
-    "load-grunt-tasks": "^0"
+    "load-grunt-tasks": "^0",
+    "progress": "^1.1.8"
   },
   "dependencies": {
     "async": "^0.9",

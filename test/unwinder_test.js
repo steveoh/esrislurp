@@ -1,6 +1,6 @@
 'use strict';
 
-var grunt = require('grunt');
+var fs = require('fs');
 var unwind = require('../unwinder.js');
 /*
   ======== A Handy Little Nodeunit Reference ========
@@ -23,41 +23,41 @@ var unwind = require('../unwinder.js');
     test.ifError(value)
 */
 
-exports.regular_expression = {
+exports.uwinder_tests = {
   setUp: function(done){
     done();
   },
   split_requires: function(test){
-    var actual = grunt.file.read('test/expected/wound_define');
+    var actual = fs.readFileSync('test/fixtures/wound_define').toString();
     actual = unwind(actual);
-    var expected = grunt.file.read('test/expected/unwound_define');
+    var expected = fs.readFileSync('test/fixtures/unwound_define').toString();
 
     test.equal(actual, expected, 'should split requires');
 
     test.done();
   },
   fix_css_paths: function(test){
-    var actual = grunt.file.read('test/expected/wound_css');
+    var actual = fs.readFileSync('test/fixtures/wound_css').toString();
     actual = unwind(actual);
-    var expected = grunt.file.read('test/expected/unwound_css');
+    var expected = fs.readFileSync('test/fixtures/unwound_css').toString();
 
     test.equal(actual, expected, 'should remove dojo prefix');
 
     test.done();
   },
   issue_17: function(test){
-    var actual = grunt.file.read('test/expected/wound_310_ArcGISTiledMapServiceLayer');
+    var actual = fs.readFileSync('test/fixtures/wound_310_ArcGISTiledMapServiceLayer').toString();
     actual = unwind(actual);
-    var expected = grunt.file.read('test/expected/unwound_310_ArcGISTiledMapServiceLayer');
+    var expected = fs.readFileSync('test/fixtures/unwound_310_ArcGISTiledMapServiceLayer').toString();
 
     test.equal(actual, expected, 'should only modify requires list');
 
     test.done();
   },
   layer_files: function(test){
-    var actual = grunt.file.read('test/expected/wound_layer_files');
+    var actual = fs.readFileSync('test/fixtures/wound_layer_files').toString();
     actual = unwind(actual);
-    var expected = grunt.file.read('test/expected/unwound_layer_files');
+    var expected = fs.readFileSync('test/fixtures/unwound_layer_files').toString();
 
     test.equal(actual, expected, 'should get rid of everything in a leading require statement');
 
