@@ -1,8 +1,7 @@
 'use strict';
 
-var grunt = require('grunt');
-var S = require('string');
-var buildEsriModule = require('../esriModuleBuilder.js');
+var fs = require('fs');
+var moduleBuilder = require('../esriModuleBuilder.js');
 /*
   ======== A Handy Little Nodeunit Reference ========
   https://github.com/caolan/nodeunit
@@ -24,19 +23,18 @@ var buildEsriModule = require('../esriModuleBuilder.js');
     test.ifError(value)
 */
 
-function stripTrailingNewLines(s) {
-  return S(s).chompRight('\n').s;
+function stripLineBreaks(s) {
+  return s.replace(/(\r\n|\n|\r)/gm,'');
 }
 
 exports.buildModule = function(test){
     test.expect(1);
 
-    function onSuccess(actual) {
-      var expected = grunt.file.read('test/expected/built_module');
+    function onSuccess(success) {
+      var expected = stripLineBreaks(fs.readFileSync('test/fixtures/built_module').toString());
+      var actual = stripLineBreaks(success);
 
-      test.equal(stripTrailingNewLines(actual),
-                 stripTrailingNewLines(expected),
-                 'should build module');
+      test.equal(actual, expected, 'should build module');
 
       test.done();
     }
@@ -46,5 +44,5 @@ exports.buildModule = function(test){
       test.done();
     }
 
-    buildEsriModule('test','3.test', onSuccess, onError);
+    moduleBuilder('test/fixtures','3.test', onSuccess, onError);
   };

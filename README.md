@@ -18,12 +18,12 @@ npm install esrislurp --save-dev
 
 ###Usage
 
-####slurpEsri(baseDir, version, [beautify], [onSuccess], [onError], [onProgress])
+####esrislurp(baseDir, version, [beautify], [onSuccess], [onError], [onProgress])
 
 #####baseDir
 Type: `String`
 
-A string value letting grunt know where to put the downloaded files.
+A string value letting esrislurp know where to put the downloaded files.
 
 
 #####version
@@ -69,7 +69,7 @@ function onSuccess() {
   console.log('Esri JS API successfully downloaded');
 }
 
-slurpEsri(baseDir, version, beautify, onSuccess);
+esrislurp(baseDir, version, beautify, onSuccess);
 ```
 
 ##Build Tools

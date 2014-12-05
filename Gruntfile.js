@@ -12,6 +12,12 @@ var version = '3.11';
 var bumpFiles = [
   'package.json'
 ];
+var files = [
+  'Gruntfile.js',
+  '*.js',
+  'tasks/*.js',
+  '<%= nodeunit.tests %>'
+];
 
 module.exports = function(grunt) {
   // load all npm grunt tasks
@@ -19,19 +25,14 @@ module.exports = function(grunt) {
 
   grunt.initConfig({
     jshint: {
-      all: [
-        'Gruntfile.js',
-        '*.js',
-        'tasks/*.js',
-        '<%= nodeunit.tests %>'
-      ],
+      all: files,
       options: {
         jshintrc: '.jshintrc',
         reporter: require('jshint-stylish')
       }
     },
     clean: {
-      tests: ['tmp']
+      tests: ['test/samplePackage']
     },
     nodeunit: {
       tests: ['test/*_test.js']
@@ -47,6 +48,23 @@ module.exports = function(grunt) {
       options: {
         version: version
       }
+    },
+    watch: {
+      jshint: {
+        files: files,
+        tasks: ['newer:jshint:main', 'jasmine:main:build']
+      },
+      src: {
+        files: files,
+        options: {
+          livereload: true
+        }
+      }
+    },
+    debug: {
+      options: {
+        open: true
+      }
     }
   });
 
@@ -61,7 +79,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('test', ['clean', 'jshint', 'nodeunit']);
 
-  grunt.registerTask('default', ['jshint']);
+  grunt.registerTask('default', ['jshint', 'watch']);
 
   grunt.registerTask('generate_list', ['esri_slurp_modules']);
 

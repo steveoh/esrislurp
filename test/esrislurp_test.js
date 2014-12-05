@@ -1,6 +1,6 @@
 'use strict';
 
-var slurpEsri = require('../esri_slurp.js');
+var slurp = require('../esrislurp.js');
 /*
   ======== A Handy Little Nodeunit Reference ========
   https://github.com/caolan/nodeunit
@@ -44,5 +44,5 @@ exports.buildModule = function(test){
       }
     }
 
-    slurpEsri('tmp','3.11', true, onSuccess, onError, onProgress);
+    slurp('test/samplePackage','3.11', true, onSuccess, onError, onProgress);
   };

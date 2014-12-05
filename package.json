@@ -26,9 +26,11 @@
     "grunt-contrib-clean": "^0",
     "grunt-contrib-jshint": "^0",
     "grunt-contrib-nodeunit": "^0",
-    "grunt-node-inspector": "^0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-debug-task": "^0.1.5",
     "jshint-stylish": "^1",
-    "load-grunt-tasks": "^0"
+    "load-grunt-tasks": "^0",
+    "progress": "^1.1.8"
   },
   "dependencies": {
     "async": "^0.9",

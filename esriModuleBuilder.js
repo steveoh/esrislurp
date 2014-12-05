@@ -1,19 +1,19 @@
 /*
-* esrislurp
-* https://github.com/steveoh/esrislurp
-*
-* Copyright (c) 2014 steveoh
-* Licensed under the MIT license.
-*/
+ * esrislurp
+ * https://github.com/steveoh/esrislurp
+ *
+ * Copyright (c) 2014 steveoh
+ * Licensed under the MIT license.
+ */
 
 'use strict';
 var walk = require('walk'),
-    S = require('string'),
-    path = require('path'),
-    os = require('os'),
-    Handlebars = require('handlebars');
+  S = require('string'),
+  path = require('path'),
+  os = require('os'),
+  Handlebars = require('handlebars');
 
-function noop(){}
+function noop() {}
 
 /*
 Expected directory structure: /jsapi/{version}/js/esri
@@ -24,50 +24,58 @@ module.exports = function(basePath, version, onSuccess, onError, onProgress) {
   onProgress = onProgress || noop;
 
   var location = path.join(basePath, 'jsapi', version, 'js', 'esri'),
-      template = Handlebars.compile('module.exports = [{{#each files}}{{#if @index}},\n {{/if}}\'{{this}}\'{{/each}}];'),
-      model = {
-        count: 0,
-        files: []
-      };
+    template = Handlebars.compile('module.exports = [{{#each files}}{{#if @index}},\n {{/if}}\'{{this}}\'{{/each}}];'),
+    model = {
+      count: 0,
+      files: []
+    };
 
-    console.log('parsing:', location);
+  console.log('parsing:', location);
 
-    // Walker options
-    var walker = walk.walk(location, {
-      followLinks: false
-    });
+  // Walker options
+  var walker = walk.walk(location, {
+    followLinks: false
+  });
 
-    var fix_windows = false;
-    if (S(os.platform()).startsWith('win')) {
-      fix_windows = true;
-      console.log('you are on windows');
+  var fix_windows = false;
+  if (S(os.platform()).startsWith('win')) {
+    fix_windows = true;
+    console.log('you are on windows');
+  }
+
+  walker.on('file', function(root, stat, next) {
+    // Add this file to the list of files
+    var fileName = path.join(root, stat.name);
+
+    var moduleName = S(fileName.replace(location, '')).chompLeft(path.sep).s;
+
+    if (fix_windows) {
+      moduleName = S(moduleName).replaceAll(path.sep, '/');
     }
 
-    walker.on('file', function(root, stat, next) {
-      // Add this file to the list of files
-      var fileName = path.join(root, stat.name);
+    if (moduleName[0] !== '.') {
+      model.files.push(moduleName);
+      model.count += 1;
+      onProgress({
+        count: model.count
+      });
+    }
+    next();
+  });
 
-      var moduleName = S(fileName.replace(location, '')).chompLeft(path.sep).s;
+  walker.on('errors', function(root, stat, next) {
+    // TODO: Use stat to display error
+    // stat - a single stats object or an array with some added attributes
+    // type - 'file', 'directory', etc
+    // error
+    // name - the name of the file, dir, etc
+    onError('failure reading files');
+  });
 
-      if (fix_windows) {
-        moduleName = S(moduleName).replaceAll(path.sep, '/');
-      }
+  walker.on('end', function() {
+    model.files = model.files.sort();
 
-      if (moduleName[0] !== '.') {
-        model.files.push(moduleName);
-        model.count += 1;
-        onProgress({count: model.count});
-      }
-      next();
-    });
-
-    walker.on('errors', function() {
-      //TODO how to obtain error message?
-      onError('failure reading files');
-    });
-
-    walker.on('end', function() {
-      var data = template(model);
-      onSuccess(data);
-    });
+    var data = template(model);
+    onSuccess(data);
+  });
 };
