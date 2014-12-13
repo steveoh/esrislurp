@@ -4,4 +4,3 @@ Gruntfile.js
 esriModuleBuilder.js
 .*
 test
-modules
