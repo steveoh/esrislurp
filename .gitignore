@@ -28,3 +28,6 @@ node_modules
 .lock-wscript
 tests/samplePackage
 *.sublime-workspace
+
+
+test/samplePackage
