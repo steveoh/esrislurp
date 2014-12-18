@@ -83,13 +83,17 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
                 body = beautify_css(body);
               }
             } catch (e) {
-              console.log(os.EOL + 'error beautifying: ' + file + ' ' + e);
+              console.warn(os.EOL + 'error beautifying: ' + file + ' ' + e);
               // swallow it's not the end of the world if it's not beautiful
             }
           }
         }
 
-        fs.writeFile(newFile, body, 'binary');
+        fs.writeFile(newFile, body, 'binary', function(err){
+          if(err){
+            console.warn(err);
+          }
+        });
 
         signalProgessUpdate();
         callback(error, body);

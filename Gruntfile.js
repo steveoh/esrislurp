@@ -8,7 +8,7 @@
 
 'use strict';
 
-var version = '3.11';
+var version = '3.12';
 var bumpFiles = [
   'package.json'
 ];
@@ -44,11 +44,6 @@ module.exports = function(grunt) {
         push: false
       }
     },
-    esri_slurp_modules: {
-      options: {
-        version: version
-      }
-    },
     watch: {
       jshint: {
         files: files,
@@ -80,8 +75,6 @@ module.exports = function(grunt) {
   grunt.registerTask('test', ['clean', 'jshint', 'nodeunit']);
 
   grunt.registerTask('default', ['jshint', 'watch']);
-
-  grunt.registerTask('generate_list', ['esri_slurp_modules']);
 
   grunt.registerTask('travis', ['jshint', 'nodeunit']);
 };
