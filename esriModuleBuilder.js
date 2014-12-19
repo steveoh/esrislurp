@@ -30,9 +30,8 @@ module.exports = function(basePath, version, onSuccess, onError, onProgress) {
       files: []
     };
 
-  console.log('parsing:', location);
-
   // Walker options
+  console.log('walking ' + location);
   var walker = walk.walk(location, {
     followLinks: false
   });
@@ -40,7 +39,7 @@ module.exports = function(basePath, version, onSuccess, onError, onProgress) {
   var fix_windows = false;
   if (S(os.platform()).startsWith('win')) {
     fix_windows = true;
-    console.log('you are on windows');
+    console.log('windows: true');
   }
 
   walker.on('file', function(root, stat, next) {
@@ -76,6 +75,7 @@ module.exports = function(basePath, version, onSuccess, onError, onProgress) {
     model.files = model.files.sort();
 
     var data = template(model);
+
     onSuccess(data);
   });
 };

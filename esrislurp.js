@@ -47,7 +47,7 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
     });
   }
 
-  async.eachLimit(esriModules, 20, function(file, callback) {
+  async.eachLimit(esriModules, 50, function(file, callback) {
     var subPath = S(path.dirname(file)).ensureRight('/').s,
       fileFolder = path.join(packageLocation, subPath),
       fileName = path.basename(file),
