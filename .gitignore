@@ -32,3 +32,4 @@ tests/samplePackage
 
 test/samplePackage
 jsapi/
+.DS_Store
