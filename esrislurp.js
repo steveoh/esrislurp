@@ -31,7 +31,10 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
   var esriModules = require('./modules/esriModules-' + version);
   var esriVersionBaseUrl = 'http://js.arcgis.com/' + version;
 
-  if (+version > 3.10) {
+  var versionParts = version.split('.');
+  var major = parseInt(versionParts[0]);
+  var minor = parseInt(versionParts[1]);
+  if (major >= 3 && minor > 10) {
     esriVersionBaseUrl += 'amd/esri/';
   } else {
     esriVersionBaseUrl += 'amd/js/esri/';
