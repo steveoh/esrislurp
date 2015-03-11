@@ -89,6 +89,7 @@ gulp.task('download-esri-api', function(cb) {
 ```
 
 ## Release History
+**0.4.1**: Added esri version 3.13.
 **0.4.0**: Added esri modules back to version 3.5.
 
 ## License
