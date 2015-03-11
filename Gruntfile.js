@@ -40,7 +40,7 @@ module.exports = function(grunt) {
     bump: {
       options: {
         files: bumpFiles,
-        commitFiles: bumpFiles,
+        commitFiles: bumpFiles.concat('README.md'),
         push: false
       }
     },
