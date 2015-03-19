@@ -89,9 +89,13 @@ gulp.task('download-esri-api', function(cb) {
 ```
 
 ## Release History
-**0.4.2**: Added esri version 3.13 from download page.
-**0.4.1**: Added esri version 3.13.
-**0.4.0**: Added esri modules back to version 3.5.
+**1.0.0**: Fixed 3.13 module list for successful builds.  
+
+**0.4.2**: Added esri version 3.13 from download page.  
+
+**0.4.1**: Added esri version 3.13.  
+
+**0.4.0**: Added esri modules back to version 3.5.  
 
 ## License
 Copyright (c) 2014 steveoh. Licensed under the MIT license.
