@@ -96,10 +96,10 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
           if(err){
             console.warn(err);
           }
+          signalProgessUpdate();
+          callback(error, body);
         });
 
-        signalProgessUpdate();
-        callback(error, body);
       });
   }, function(err) {
     if (err) {
