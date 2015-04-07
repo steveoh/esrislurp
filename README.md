@@ -89,6 +89,8 @@ gulp.task('download-esri-api', function(cb) {
 ```
 
 ## Release History
+**1.0.2**: Remove string.js dependency.
+
 **1.0.1**: Update dependencies to remove log error messages.  
 
 **1.0.0**: Fixed 3.13 module list for successful builds.  
