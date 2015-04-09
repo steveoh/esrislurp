@@ -8,7 +8,6 @@
 
 'use strict';
 var walk = require('walk'),
-  S = require('string'),
   path = require('path'),
   os = require('os'),
   Handlebars = require('handlebars');
@@ -37,7 +36,7 @@ module.exports = function(basePath, version, onSuccess, onError, onProgress) {
   });
 
   var fix_windows = false;
-  if (S(os.platform()).startsWith('win')) {
+  if (os.platform().indexOf('win') === 0) {
     fix_windows = true;
     console.log('windows: true');
   }
@@ -46,10 +45,13 @@ module.exports = function(basePath, version, onSuccess, onError, onProgress) {
     // Add this file to the list of files
     var fileName = path.join(root, stat.name);
 
-    var moduleName = S(fileName.replace(location, '')).chompLeft(path.sep).s;
+    var moduleName = fileName.replace(location, '');
+    if (moduleName.indexOf(path.sep) === 0) {
+      moduleName = moduleName.slice(1);
+    }
 
     if (fix_windows) {
-      moduleName = S(moduleName).replaceAll(path.sep, '/');
+      moduleName = moduleName.replace(new RegExp('\\' + path.sep, 'g'), '/');
     }
 
     if (moduleName[0] !== '.') {
