@@ -15,8 +15,22 @@ var fs = require('fs'),
   mkdirp = require('mkdirp'),
   os = require('os'),
   request = require('request'),
-  S = require('string'),
   unwind = require('./unwinder');
+
+var endsWith = function(s, suffix) {
+  var l = s.length - suffix.length;
+  if (l >= 0 && s.indexOf(suffix, l) === l) {
+    return true;
+  }
+  return false;
+};
+
+var ensureRight = function(s, suffix) {
+  if (endsWith(s, suffix)) {
+    return s;
+  }
+  return s + suffix;
+};
 
 function noop() {}
 
@@ -25,7 +39,7 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
   onError = onError || noop;
   onProgress = onProgress || noop;
 
-  var packageLocation = S(basePath).ensureRight(path.sep).s;
+  var packageLocation = ensureRight(basePath, path.sep);
   mkdirp.sync(packageLocation);
 
   var esriModules = require('./modules/esriModules-' + version);
@@ -51,7 +65,7 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
   }
 
   async.eachLimit(esriModules, 50, function(file, callback) {
-    var subPath = S(path.dirname(file)).ensureRight('/').s,
+    var subPath = ensureRight(path.dirname(file), '/'),
       fileFolder = path.join(packageLocation, subPath),
       fileName = path.basename(file),
       httpUrl = esriVersionBaseUrl + subPath + fileName;
