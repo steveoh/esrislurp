@@ -60,7 +60,7 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
   var total = esriModules.length,
     count = 0;
 
-  function signalProgessUpdate() {
+  function signalProgressUpdate() {
     onProgress({
       count: count,
       total: total
@@ -91,7 +91,7 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
 
         // likely a 404, resume next by exiting on the callback
         if (!body) {
-          signalProgessUpdate();
+          signalProgressUpdate();
           return callback(null, body);
         }
 
@@ -119,7 +119,7 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
           if (err) {
             console.warn(err);
           }
-          signalProgessUpdate();
+          signalProgressUpdate();
           return callback(err, body);
         });
 
