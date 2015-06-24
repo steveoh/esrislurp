@@ -1,6 +1,6 @@
 {
   "name": "esrislurp",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A node module to get the slource by downloading the esri js api amd modules and creating a package.",
   "homepage": "https://github.com/steveoh/esrislurp",
   "repository": {
