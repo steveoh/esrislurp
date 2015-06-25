@@ -49,6 +49,6 @@ exports.buildModule = function(test){
 
     temp.mkdir('slurp', function(err, dirPath) {
 
-      slurp(dirPath,'3.11', true, onSuccess, onError, onProgress);
+      slurp(dirPath,'3.13', true, onSuccess, onError, onProgress);
     });
   };
