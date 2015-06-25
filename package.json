@@ -21,6 +21,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "adm-zip": "^0.x",
     "grunt": "~0.4.x",
     "grunt-bump": "^0.x",
     "grunt-contrib-clean": "^0.x",
@@ -30,17 +31,18 @@
     "grunt-debug-task": "^0.x",
     "jshint-stylish": "^2.x",
     "load-grunt-tasks": "^3.x",
-    "progress": "^1.x"
+    "temp": "^0.x"
   },
   "dependencies": {
-    "async": "^1.x",
-    "handlebars": "^3.x",
-    "js-beautify": "^1.x",
-    "mkdirp": "^0.x",
-    "request": "^2.x",
-    "walk": "^2.x"
+    "async": "^0",
+    "handlebars": "^3",
+    "js-beautify": "^1",
+    "mkdirp": "^0",
+    "request": "^2",
+    "yargs": "^3"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "add-module": "node addModuleCli.js"
   }
 }

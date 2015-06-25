@@ -1,6 +1,9 @@
 'use strict';
 
-var slurp = require('../esrislurp.js');
+var fs = require('fs');
+var addModule = require('../addModule');
+var fs = require('fs');
+var path = require('path');
 var temp = require("temp").track();
 
 /*
@@ -24,31 +27,23 @@ var temp = require("temp").track();
     test.ifError(value)
 */
 
+function stripLineBreaks(s) {
+  return s.replace(/(\r\n|\n|\r)/gm,'');
+}
+
 exports.buildModule = function(test){
-    test.expect(1);
-
-    function onSuccess(actual) {
-      test.ok(true);
-      test.done();
-    }
-
-    function onError(errorMessage) {
-      test.ifError(errorMessage);
-      test.done();
-    }
-
-    var previousPercent;
-    function onProgress(progress) {
-      var completePercent = Math.floor(progress.count / progress.total * 100);
-      if(previousPercent !== completePercent && completePercent % 10 === 0) {
-        console.log(completePercent +"%");
-        previousPercent = completePercent;
-      }
-    }
+    test.expect(2);
 
 
-    temp.mkdir('slurp', function(err, dirPath) {
+    temp.mkdir('addModule', function(err, dirPath) {
 
-      slurp(dirPath,'3.11', true, onSuccess, onError, onProgress);
+      addModule('test/fixtures/arcgis_js_v3test_api.zip', dirPath, function(error, results) {
+        test.ifError(error);
+        var expected = fs.readFileSync(path.join('test', 'fixtures', 'expected_esriModules-3.testcompact.js')).toString();
+        var actual = fs.readFileSync(path.join(dirPath, 'esriModules-3.testcompact.js')).toString();
+
+        test.equal(actual, expected);
+        test.done();
+      });
     });
-  };
+};
