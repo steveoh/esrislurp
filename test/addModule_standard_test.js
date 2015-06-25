@@ -1,7 +1,11 @@
 'use strict';
 
 var fs = require('fs');
-var moduleBuilder = require('../esriModuleBuilder.js');
+var addModule = require('../addModule');
+var fs = require('fs');
+var path = require('path');
+var temp = require("temp").track();
+
 /*
   ======== A Handy Little Nodeunit Reference ========
   https://github.com/caolan/nodeunit
@@ -28,21 +32,18 @@ function stripLineBreaks(s) {
 }
 
 exports.buildModule = function(test){
-    test.expect(1);
+    test.expect(2);
 
-    function onSuccess(success) {
-      var expected = stripLineBreaks(fs.readFileSync('test/fixtures/built_module').toString());
-      var actual = stripLineBreaks(success);
 
-      test.equal(actual, expected, 'should build module');
+    temp.mkdir('addModule', function(err, dirPath) {
 
-      test.done();
-    }
+      addModule('test/fixtures/arcgis_js_v3test_api.zip', dirPath, function(error, results) {
+        test.ifError(error);
+        var expected = fs.readFileSync(path.join('test', 'fixtures', 'expected_esriModules-3.test.js')).toString();
+        var actual = fs.readFileSync(path.join(dirPath, 'esriModules-3.test.js')).toString();
 
-    function onError(errorMessage) {
-      test.ifError(errorMessage);
-      test.done();
-    }
-
-    moduleBuilder('test/fixtures','3.test', onSuccess, onError);
-  };
+        test.equal(actual, expected);
+        test.done();
+      });
+    });
+};

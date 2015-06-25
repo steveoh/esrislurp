@@ -1,8 +1,6 @@
 'use strict';
 
-var slurp = require('../esrislurp.js');
-var temp = require("temp").track();
-
+var extractModuleFiles = require('../addModule/extractModuleFiles');
 /*
   ======== A Handy Little Nodeunit Reference ========
   https://github.com/caolan/nodeunit
@@ -25,30 +23,11 @@ var temp = require("temp").track();
 */
 
 exports.buildModule = function(test){
-    test.expect(1);
+    test.expect(2);
 
-    function onSuccess(actual) {
-      test.ok(true);
+    extractModuleFiles('test/fixtures/invalid_arcgis_js_api.zip', function(error, results) {
+      test.ok(error);
+      test.equal(error.message, 'Archive not recognized; unable to determine version');
       test.done();
-    }
-
-    function onError(errorMessage) {
-      test.ifError(errorMessage);
-      test.done();
-    }
-
-    var previousPercent;
-    function onProgress(progress) {
-      var completePercent = Math.floor(progress.count / progress.total * 100);
-      if(previousPercent !== completePercent && completePercent % 10 === 0) {
-        console.log(completePercent +"%");
-        previousPercent = completePercent;
-      }
-    }
-
-
-    temp.mkdir('slurp', function(err, dirPath) {
-
-      slurp(dirPath,'3.11', true, onSuccess, onError, onProgress);
     });
   };
