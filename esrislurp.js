@@ -10,6 +10,7 @@
 var fs = require('fs'),
   path = require('path'),
   async = require('async'),
+  http = require('http'),
   beautify_js = require('js-beautify').js_beautify,
   beautify_css = require('js-beautify').css,
   mkdirp = require('mkdirp'),
@@ -42,6 +43,8 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
   var packageLocation = ensureRight(basePath, path.sep);
   mkdirp.sync(packageLocation);
 
+  // reuse open connections by setting keepAlive true
+  var agent = new http.Agent({keepAlive: true});
   var esriModules = require('./modules/esriModules-' + version);
   var esriVersionBaseUrl = 'http://js.arcgis.com/' + version;
 
@@ -57,7 +60,7 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
   var total = esriModules.length,
     count = 0;
 
-  function signalProgessUpdate() {
+  function signalProgressUpdate() {
     onProgress({
       count: count,
       total: total
@@ -74,16 +77,22 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
       mkdirp.sync(fileFolder);
     }
 
-    request({
+    request.defaults({agent: agent})({
         uri: httpUrl,
         encoding: 'binary'
       },
       function(error, response, body) {
         count += 1;
-        if (body.length < 1) {
-          signalProgessUpdate();
-          callback(error, body);
-          return;
+
+        if (error) {
+            signalProgressUpdate();
+            return callback(error);
+        }
+
+        // likely a 404, resume next by exiting on the callback
+        if (!body) {
+          signalProgressUpdate();
+          return callback(null, body);
         }
 
         var newFile = path.join(packageLocation, file);
@@ -107,13 +116,13 @@ module.exports = function(basePath, version, beautify, onSuccess, onError, onPro
         }
 
         fs.writeFile(newFile, body, 'binary', function(err){
-          if(err){
+          if (err) {
             console.warn(err);
           }
+          signalProgressUpdate();
+          return callback(err, body);
         });
 
-        signalProgessUpdate();
-        callback(error, body);
       });
   }, function(err) {
     if (err) {

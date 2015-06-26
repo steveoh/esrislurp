@@ -1,6 +1,6 @@
 {
   "name": "esrislurp",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A node module to get the slource by downloading the esri js api amd modules and creating a package.",
   "homepage": "https://github.com/steveoh/esrislurp",
   "repository": {
@@ -21,24 +21,24 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "grunt": "~0.4",
-    "grunt-bump": "^0",
-    "grunt-contrib-clean": "^0",
-    "grunt-contrib-jshint": "^0",
-    "grunt-contrib-nodeunit": "^0",
-    "grunt-contrib-watch": "^0",
-    "grunt-debug-task": "^0",
-    "jshint-stylish": "^1",
-    "load-grunt-tasks": "^3",
-    "temp": "^0"
+    "grunt": "~0.4.x",
+    "grunt-bump": "^0.x",
+    "grunt-contrib-clean": "^0.x",
+    "grunt-contrib-jshint": "^0.x",
+    "grunt-contrib-nodeunit": "^0.x",
+    "grunt-contrib-watch": "^0.x",
+    "grunt-debug-task": "^0.x",
+    "jshint-stylish": "^2.x",
+    "load-grunt-tasks": "^3.x",
+    "temp": "^0.x"
   },
   "dependencies": {
-    "async": "^0",
-    "handlebars": "^3",
-    "js-beautify": "^1",
-    "mkdirp": "^0",
-    "request": "^2",
-    "yargs": "^3"
+    "async": "^1.x",
+    "handlebars": "^3.x",
+    "js-beautify": "^1.x",
+    "mkdirp": "^0.x",
+    "request": "^2.x",
+    "yargs": "^3.x"
   },
   "scripts": {
     "test": "grunt test",
