@@ -28,9 +28,11 @@ A string value letting esrislurp know where to put the downloaded files.
 
 #####version
 Type: `String`
-Valid Values: `"3.8"`|`"3.9"`|`"3.10"`|`"3.11"`
+Valid Values: `"3.13"`|`"3.13compact"`
 
-A string value representing the version of the esri js api to download.
+A string value representing the version of the esri js api to download.  
+
+*All versions from `3.0` to `3.13` both standard and compact are valid.*
 
 
 #####beautify
@@ -62,7 +64,7 @@ A function which is called after each file is downloaed.  ``progess`` is an obje
 ```javascript
 var esrislurp = require('esrislurp'),
     baseDir = 'src',
-    version = '3.11',
+    version = '3.13',
     beautify = true;
 
 function onSuccess() {
@@ -84,12 +86,17 @@ var gulp = require('gulp');
 var esrislurp = require('esrislurp')
 
 gulp.task('download-esri-api', function(cb) {
-  esrislurp('src', '3.11', cb, cb);
+  esrislurp('src', '3.13compact', cb, cb);
 });
 ```
 
+## Adding new modules
+1. Download the API: Navigate to the [esri downloads page](https://developers.arcgis.com/en/downloads/) and download the API selecting the version you want to create a module list for.
+1. Run add-module: `npm run add-module path/to/arcGisJsApi.zip`
+
+
 ## Release History
-**1.1.0**: Update dependencies. Fix bugs to allow for all node versions to complete successfully. 
+**1.1.0**: Update dependencies. Fix bugs to allow for all node versions to complete successfully.
 
 **1.0.3**: Remove string.js dependency from module builder.
 
