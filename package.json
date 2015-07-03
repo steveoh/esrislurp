@@ -21,6 +21,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "adm-zip": "^0.x",
     "grunt": "~0.4.x",
     "grunt-bump": "^0.x",
     "grunt-contrib-clean": "^0.x",
