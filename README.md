@@ -96,6 +96,8 @@ gulp.task('download-esri-api', function(cb) {
 
 
 ## Release History
+**1.2.0**: Introduce the creation of a module list from a zip file for both compact and full api. Introduce the ability to slurp the compact api.
+
 **1.1.0**: Update dependencies. Fix bugs to allow for all node versions to complete successfully.
 
 **1.0.3**: Remove string.js dependency from module builder.
