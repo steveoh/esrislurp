@@ -96,6 +96,8 @@ gulp.task('download-esri-api', function(cb) {
 
 
 ## Release History
+**1.2.3**: Updated unwinder to create successful dojo builds with 3.14
+
 **1.2.1**: Added esri version 3.14
 
 **1.2.0**: Introduce the creation of a module list from a zip file for both compact and full api. Introduce the ability to slurp the compact api.
